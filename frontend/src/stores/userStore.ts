@@ -134,7 +134,7 @@ export const useUserStore = defineStore("user",{
     async refreshToken(): Promise<boolean> {
       if (!this.user.refresh) {
         this.removeToken();
-        return false;
+        return false;  // Explicitly return false if no refresh token exists
       }
 
       try {
@@ -148,11 +148,13 @@ export const useUserStore = defineStore("user",{
         console.log("Token odświeżony pomyślnie");
 
         this.setupTokenRefresh();
-        return true;
+        return true;  // Return true when the token is successfully refreshed
       } catch (error) {
         console.error("Błąd odświeżania tokena:", error);
+        return false;  // Return false if there is an error
       }
     },
+
 
     logout(): void {
       this.removeToken();
