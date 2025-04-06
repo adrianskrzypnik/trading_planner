@@ -1,0 +1,13 @@
+# nixpacks.toml
+[builds]
+  [[builds.backend]]
+  path = "backend"
+  type = "python" # Backend Django
+  build = "pip install -r requirements.txt" # Komenda instalacji zależności
+  start = "gunicorn core.wsgi:application --bind 0.0.0.0:8000" # Komenda do uruchomienia aplikacji
+
+  [[builds.frontend]]
+  path = "frontend"
+  type = "node" # Frontend Vue.js
+  build = "npm install && npm run build" # Komenda budowania frontu
+  start = "npm run serve" # Komenda do uruchomienia frontu (zwykle dla aplikacji Vue.js)
