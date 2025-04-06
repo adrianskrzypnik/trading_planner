@@ -116,15 +116,14 @@ const handleLogin = async () => {
     isLoading.value = true;
     errorMessage.value = '';
 
-    const response = await axios.post('/api/login/', {
+    const response = await axios.post('/api/auth/login/', {
       email: email.value,
       password: password.value
     })
 
     userStore.setToken(response.data)
-    console.log(response.data)
     axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
-    const userResponse = await axios.get('/api/me/')
+    const userResponse = await axios.get('/api/auth/me/')
     userStore.setUserInfo(userResponse.data)
 
     router.push('/');

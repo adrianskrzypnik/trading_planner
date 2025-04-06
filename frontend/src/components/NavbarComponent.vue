@@ -6,36 +6,22 @@
           <!-- Logo/Brand -->
           <div class="flex-shrink-0 flex items-center">
             <router-link to="/" class="text-xl font-bold text-indigo-600">
-              App
+              Gym App
             </router-link>
           </div>
 
           <!-- Desktop Navigation Links -->
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <router-link
-              to="/"
-              class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              :class="{ 'border-indigo-500 text-gray-900': isActiveRoute('/') }"
-            >
-              Home
-            </router-link>
 
             <router-link
               v-if="userStore.user.isAuthenticated"
-              to="/dashboard"
+              to="/plan"
               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              :class="{ 'border-indigo-500 text-gray-900': isActiveRoute('/dashboard') }"
+              :class="{ 'border-indigo-500 text-gray-900': isActiveRoute('/plan') }"
             >
-              Dashboard
+              Make Plan
             </router-link>
 
-            <router-link
-              to="/about"
-              class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              :class="{ 'border-indigo-500 text-gray-900': isActiveRoute('/about') }"
-            >
-              About
-            </router-link>
           </div>
         </div>
 

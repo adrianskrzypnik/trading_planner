@@ -178,7 +178,7 @@ const handleRegister = async () => {
   try {
     isLoading.value = true;
 
-    const response = await axios.post('/api/register/', {
+    const response = await axios.post('/api/auth/register/', {
       name: name.value,
       email: email.value,
       password1: password1.value,

@@ -16,7 +16,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'api.User'
+AUTH_USER_MODEL = 'users.User'
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
@@ -36,7 +36,9 @@ INSTALLED_APPS = [
 
     'rest_framework',  # Django REST framework
     'corsheaders',  # Obsługa zapytań z frontendu
-    'api',  # Nasza aplikacja API
+    'users',
+    'exercises',
+    'workouts',
     'rest_framework_simplejwt',
     'rest_framework.authtoken'
 ]
@@ -69,7 +71,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -87,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -95,14 +97,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'moja_baza',
+        'USER': 'adis',
+        'PASSWORD': 'moje_haslo123',  # ← Uwaga na polskie znaki!
+        'HOST': 'localhost',
+        'PORT': '5433',
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
