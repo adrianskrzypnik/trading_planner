@@ -1,14 +1,31 @@
 # Etap budowania
-FROM node:18-alpine as build-stage
+FROM node:18-alpine AS build
+
 WORKDIR /app
+
+# Kopiowanie plików zależności
 COPY package*.json ./
-RUN npm ci
+
+# Instalacja zależności
+RUN npm install
+
+# Kopiowanie reszty kodu źródłowego
 COPY . .
+
+# Budowanie aplikacji
 RUN npm run build
 
 # Etap produkcyjny
 FROM nginx:alpine
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# Kopiowanie zbudowanej aplikacji z etapu budowania
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Kopiowanie konfiguracji nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Eksponowanie portu
 EXPOSE 80
+
+# Uruchamianie nginx
 CMD ["nginx", "-g", "daemon off;"]

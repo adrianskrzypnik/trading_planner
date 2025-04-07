@@ -1,49 +1,45 @@
 services:
-  backend:
-    build: ./backend
-    volumes:
-      - ./backend:/app
-    ports:
-      - "8000:8000"
-    environment:
-      - DEBUG=True
-      - DATABASE_URL=postgresql://adis:adis1337@db:5432/trading_planner
-      - SECRET_KEY=change_this_to_a_secret_key_in_production
-    depends_on:
-      db:
-        condition: service_healthy
-    command: >
-      sh -c "while ! nc -z db 5432; do sleep 1; echo 'Waiting for DB...'; done &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
-
-  frontend:
-    build: ./frontend
-    volumes:
-      - /app/node_modules
-    ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://backend:8000
-    depends_on:
-      - backend
-    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
-
   db:
     image: postgres:17
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
     environment:
-      - POSTGRES_DB=trading_planner
-      - POSTGRES_USER=adis
-      - POSTGRES_PASSWORD=adis1337
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
     ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U adis -d trading_planner"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - "5433:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    environment:
+      - DJANGO_ENVIRONMENT=dev
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    command: npm run dev
+    environment:
+      - VITE_API_URL=http://localhost:8000
 
 volumes:
   postgres_data:
